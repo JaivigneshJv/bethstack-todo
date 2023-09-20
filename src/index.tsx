@@ -10,20 +10,12 @@ const app = new Elysia()
   .get("/", ({ html }) =>
     html(
       <BaseHtml>
-        <body>
-          <div class="h-100 w-full flex items-center justify-center bg-teal-lightest font-sans">
-            <div class="bg-white rounded shadow p-6 m-4 w-full lg:w-3/4 lg:max-w-lg">
-              <div class="mb-4">
-                <h1 class="text-grey-darkest">Todo List</h1>
-                <div
-                  hx-get="/todos"
-                  hx-trigger="load"
-                  hx-swap="innerHTML"
-                ></div>
-              </div>
-            </div>
-          </div>
-        </body>
+        <body
+          class="flex w-full h-screen justify-center items-center"
+          hx-get="/todos"
+          hx-trigger="load"
+          hx-swap="innerHTML"
+        ></body>
       </BaseHtml>
     )
   )
@@ -91,14 +83,13 @@ const BaseHtml = ({ children }: elements.Children) => `
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<script src="https://unpkg.com/htmx.org/dist/htmx.min.js"></script>
 	<script src="https://cdn.tailwindcss.com"></script>
-	<title>TODO List</title>
+	<title>TODO</title>
 </head>
 ${children}`;
 
 function TodoItem({ content, completed, id }: Todo) {
   return (
     <div class="flex flex-row space-x-3">
-      <p>{content}</p>
       <input
         type="checkbox"
         checked={completed}
@@ -106,13 +97,14 @@ function TodoItem({ content, completed, id }: Todo) {
         hx-swap="outerHTML"
         hx-target="closest div"
       />
+      <p>{content}</p>
       <button
-        class="flex-no-shrink p-2 ml-2 border-2 rounded text-red border-red hover:text-white hover:bg-red"
+        class="text-red-500"
         hx-delete={`/todos/${id}`}
         hx-swap="outerHTML"
         hx-target="closest div"
       >
-        Remove
+        X
       </button>
     </div>
   );
@@ -136,18 +128,8 @@ function TodoForm() {
       hx-post="/todos"
       hx-swap="beforebegin"
     >
-      <input
-        class="shadow appearance-none border rounded w-full py-2 px-3 mr-4 text-grey-darker"
-        type="text"
-        name="content"
-        class="border border-black"
-      />
-      <button
-        class="flex-no-shrink p-2 border-2 rounded text-teal border-teal hover:text-white hover:bg-teal"
-        type="submit"
-      >
-        Add
-      </button>
+      <input type="text" name="content" class="border border-black" />
+      <button type="submit">Add</button>
     </form>
   );
 }
